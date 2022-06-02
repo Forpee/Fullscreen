@@ -9,7 +9,7 @@ varying vec2 vUv;
 
 void main()
 {
-    float normSpeed=clamp(speed*40.,0.,1.);
+    float normSpeed=clamp(speed*20.,0.,1.);
     float mouseDist=length(vUv-uMouse);
     
     float c=smoothstep(.2,0.,mouseDist);
