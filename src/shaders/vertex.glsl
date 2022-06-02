@@ -1,6 +1,7 @@
 varying vec2 vUv;
 uniform float progress;
 uniform float direction;
+uniform float uTime;
 
 void main()
 {
@@ -21,6 +22,7 @@ void main()
     float zProgress=mix(clamp(2.*progress,0.,1.),clamp(1.-2.*(1.-progress),0.,1.),direction);
     
     pos.z+=zOffset*(stick*hyperProgress-zProgress);
+    pos.z+=progress*sin(distance*10.+2.*uTime)*.1;
     
     gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.);
     

@@ -30,15 +30,16 @@ const material = new THREE.ShaderMaterial({
         uTime: { value: 0 },
         direction: { value: 0 },
         uResolution: { value: new THREE.Vector4() },
+        uMouse: { value: new THREE.Vector2() },
         progress: { value: 0 },
         uTexture: { value: new THREE.TextureLoader().load('/beauty.jpg') }
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     side: THREE.DoubleSide,
-    wireframe: true
+    // wireframe: true
 });
-
+let mouse = new THREE.Vector2();
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
@@ -56,6 +57,12 @@ document.addEventListener('mouseup', () => {
         duration: 0.5,
         value: 0,
     });
+});
+
+document.addEventListener('mousemove', (e) => {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    material.uniforms.uMouse.value = mouse;
 });
 /**
  * Sizes
