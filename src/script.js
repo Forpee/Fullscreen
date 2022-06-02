@@ -29,6 +29,7 @@ const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
         direction: { value: 0 },
+        speed: { value: 0 },
         uResolution: { value: new THREE.Vector4() },
         uMouse: { value: new THREE.Vector2() },
         progress: { value: 0 },
@@ -40,6 +41,7 @@ const material = new THREE.ShaderMaterial({
     // wireframe: true
 });
 let mouse = new THREE.Vector2();
+let prevMouse = new THREE.Vector2();
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
@@ -60,9 +62,20 @@ document.addEventListener('mouseup', () => {
 });
 
 document.addEventListener('mousemove', (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mouse.x = (e.clientX / window.innerWidth);
+    mouse.y = 1 - (e.clientY / window.innerHeight);
     material.uniforms.uMouse.value = mouse;
+
+    // get speed of mousemove
+    const speed = mouse.distanceTo(prevMouse);
+    // console.log(speed);
+    // if (speed > 0.01) {
+    //     material.uniforms.direction.value = 1;
+    // }
+    prevMouse.copy(mouse);
+    // update material uniforms
+    material.uniforms.speed.value = speed;
+
 });
 /**
  * Sizes
