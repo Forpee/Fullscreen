@@ -28,6 +28,7 @@ let a1; let a2;
 const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
+        direction: { value: 0 },
         uResolution: { value: new THREE.Vector4() },
         progress: { value: 0 },
         uTexture: { value: new THREE.TextureLoader().load('/beauty.jpg') }
@@ -42,6 +43,7 @@ const material = new THREE.ShaderMaterial({
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 document.addEventListener('mousedown', () => {
+    material.uniforms.direction.value = 0;
     gsap.to(material.uniforms.progress, {
         duration: 0.5,
         value: 1,
@@ -49,6 +51,7 @@ document.addEventListener('mousedown', () => {
 });
 // event listener for mouse up event
 document.addEventListener('mouseup', () => {
+    material.uniforms.direction.value = 1;
     gsap.to(material.uniforms.progress, {
         duration: 0.5,
         value: 0,
