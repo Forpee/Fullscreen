@@ -23,15 +23,18 @@ const scene = new THREE.Scene();
 // Geometry
 const geometry = new THREE.PlaneBufferGeometry(1, 1, 32, 32);
 
+let a1; let a2;
 // Material
 const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector4() },
+        uTexture: { value: new THREE.TextureLoader().load('/beauty.jpg') }
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    wireframe: true
 });
 
 // Mesh
@@ -45,9 +48,19 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
+
+let imageAspectRatio = 3648 / 5472;
+if (sizes.height / sizes.width > imageAspectRatio) {
+    a1 = (sizes.width / sizes.height) * imageAspectRatio;
+    a2 = 1;
+} else {
+    a1 = 1;
+    a2 = (sizes.height / sizes.width) / imageAspectRatio;
+}
 material.uniforms.uResolution.value.x = sizes.width;
 material.uniforms.uResolution.value.y = sizes.height;
-let imageAspectRatio = 5472 / 3648;
+material.uniforms.uResolution.value.z = a1;
+material.uniforms.uResolution.value.w = a2;
 window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth;
@@ -62,8 +75,6 @@ window.addEventListener('resize', () => {
     } else {
         mesh.scale.y = 1 / camera.aspect;
     }
-
-    let a1; let a2;
 
     if (sizes.height / sizes.width > imageAspectRatio) {
         a1 = (sizes.width / sizes.height) * imageAspectRatio;
