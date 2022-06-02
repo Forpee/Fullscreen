@@ -27,6 +27,7 @@ const geometry = new THREE.PlaneBufferGeometry(1, 1, 32, 32);
 const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector4() },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
@@ -44,7 +45,9 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
-
+material.uniforms.uResolution.value.x = sizes.width;
+material.uniforms.uResolution.value.y = sizes.height;
+let imageAspectRatio = 5472 / 3648;
 window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth;
@@ -53,11 +56,26 @@ window.addEventListener('resize', () => {
     // Update camera
     camera.aspect = sizes.width / sizes.height;
     camera.updateProjectionMatrix();
+
     if (sizes.width / sizes.height > 1) {
         mesh.scale.x = camera.aspect;
     } else {
         mesh.scale.y = 1 / camera.aspect;
     }
+
+    let a1; let a2;
+
+    if (sizes.height / sizes.width > imageAspectRatio) {
+        a1 = (sizes.width / sizes.height) * imageAspectRatio;
+        a2 = 1;
+    } else {
+        a1 = 1;
+        a2 = (sizes.height / sizes.width) / imageAspectRatio;
+    }
+    material.uniforms.uResolution.value.x = sizes.width;
+    material.uniforms.uResolution.value.y = sizes.height;
+    material.uniforms.uResolution.value.z = a1;
+    material.uniforms.uResolution.value.w = a2;
 
     // Update renderer
     renderer.setSize(sizes.width, sizes.height);
