@@ -21,7 +21,7 @@ const scene = new THREE.Scene();
  * Test mesh
  */
 // Geometry
-const geometry = new THREE.PlaneBufferGeometry(1, 1, 32, 32);
+const geometry = new THREE.PlaneBufferGeometry(1, 1, 128, 128);
 
 let a1; let a2;
 // Material
@@ -29,6 +29,7 @@ const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector4() },
+        progress: { value: 0 },
         uTexture: { value: new THREE.TextureLoader().load('/beauty.jpg') }
     },
     vertexShader: vertexShader,
@@ -40,7 +41,19 @@ const material = new THREE.ShaderMaterial({
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
-
+document.addEventListener('mousedown', () => {
+    gsap.to(material.uniforms.progress, {
+        duration: 0.5,
+        value: 1,
+    });
+});
+// event listener for mouse up event
+document.addEventListener('mouseup', () => {
+    gsap.to(material.uniforms.progress, {
+        duration: 0.5,
+        value: 0,
+    });
+});
 /**
  * Sizes
  */

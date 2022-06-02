@@ -1,4 +1,5 @@
 varying vec2 vUv;
+uniform float progress;
 
 void main()
 {
@@ -9,8 +10,12 @@ void main()
     float maxdist=length(vec2(.5));
     float normalizedDistance=distance/maxdist;
     float stickTo=normalizedDistance;
+    float hyperProgress=min(2.*progress,2.*(1.-progress));
     
-    pos.z+=stickTo;
+    float zOffset=2.;
+    float zProgress=clamp(2.*progress,0.,1.);
+    
+    pos.z+=zOffset*(stickTo*hyperProgress-zProgress);
     
     gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.);
     
